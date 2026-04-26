@@ -127,8 +127,8 @@ const AdminLayout = ({ children, title, actions }) => {
     return () => { supabase.removeChannel(channel) }
   }, [])
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('arbora_admin')
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
     navigate('/admin')
   }
 

@@ -1,21 +1,32 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '../../lib/supabase'
+
+const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL ?? 'admin@arborahogar.com'
 
 const AdminLogin = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'arbora2024'
+    setLoading(true)
+    setError('')
 
-    if (password === adminPassword) {
-      sessionStorage.setItem('arbora_admin', 'true')
-      navigate('/admin/proyectos')
-    } else {
-      setError('Contraseña incorrecta')
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: ADMIN_EMAIL,
+      password,
+    })
+
+    if (authError) {
+      setError(authError.message)
+      setLoading(false)
+      return
     }
+
+    navigate('/admin/proyectos')
   }
 
   return (
@@ -42,10 +53,11 @@ const AdminLogin = () => {
           
           <button
             type="submit"
-            className="w-full bg-primary text-on-primary px-8 py-3 rounded-md 
-                     font-semibold hover:opacity-90 transition-opacity"
+            disabled={loading}
+            className="w-full bg-primary text-on-primary px-8 py-3 rounded-md
+                     font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
           >
-            Entrar
+            {loading ? 'Verificando...' : 'Entrar'}
           </button>
         </form>
       </div>
