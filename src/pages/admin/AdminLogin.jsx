@@ -21,7 +21,7 @@ const AdminLogin = () => {
     })
 
     if (authError) {
-      setError(authError.message)
+      setError('Contraseña incorrecta')
       setLoading(false)
       return
     }

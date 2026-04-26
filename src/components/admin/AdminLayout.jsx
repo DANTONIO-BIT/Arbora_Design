@@ -101,6 +101,7 @@ const AdminLayout = ({ children, title, actions }) => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const [newLeads, setNewLeads] = useState(0)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // Initial count + realtime subscription for new leads
   useEffect(() => {
@@ -132,82 +133,125 @@ const AdminLayout = ({ children, title, actions }) => {
     navigate('/admin')
   }
 
-  return (
-    <div className="min-h-screen flex bg-surface">
-      {/* Sidebar */}
-      <aside className="w-56 bg-white border-r border-primary/10 flex flex-col flex-shrink-0 sticky top-0 h-screen">
-        {/* Brand */}
-        <div className="px-6 py-7 border-b border-primary/10">
+  const closeSidebar = () => setSidebarOpen(false)
+
+  const SidebarContent = () => (
+    <>
+      {/* Brand */}
+      <div className="px-6 py-7 border-b border-primary/10 flex items-center justify-between">
+        <div>
           <span className="font-serif text-xl text-on-surface">Arbora</span>
           <span className="text-[9px] text-primary/40 uppercase tracking-[0.25em] block mt-0.5">
             Panel de control
           </span>
         </div>
+        <button
+          onClick={closeSidebar}
+          className="lg:hidden p-1 text-on-surface-variant hover:text-on-surface"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-        {/* Nav */}
-        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
-          {NAV.map(({ path, label, icon }) => {
-            const active = pathname === path || pathname.startsWith(path + '/')
-            const isLeads = path === '/admin/leads'
-            return (
-              <Link
-                key={path}
-                to={path}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all ${
-                  active
-                    ? 'bg-primary/8 text-primary'
-                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface'
-                }`}
-              >
-                <span className={active ? 'text-primary' : 'text-primary/30'}>{icon}</span>
-                {label}
-                {isLeads && newLeads > 0 && (
-                  <span className="ml-auto bg-red-500 text-white text-[8px] font-bold rounded-full min-w-[1.1rem] h-[1.1rem] flex items-center justify-center px-1 leading-none">
-                    {newLeads > 9 ? '9+' : newLeads}
-                  </span>
-                )}
-              </Link>
-            )
-          })}
-        </nav>
+      {/* Nav */}
+      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        {NAV.map(({ path, label, icon }) => {
+          const active = pathname === path || pathname.startsWith(path + '/')
+          const isLeads = path === '/admin/leads'
+          return (
+            <Link
+              key={path}
+              to={path}
+              onClick={closeSidebar}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-[10px] font-bold uppercase tracking-widest transition-all ${
+                active
+                  ? 'bg-primary/8 text-primary'
+                  : 'text-on-surface-variant hover:text-on-surface hover:bg-surface'
+              }`}
+            >
+              <span className={active ? 'text-primary' : 'text-primary/30'}>{icon}</span>
+              {label}
+              {isLeads && newLeads > 0 && (
+                <span className="ml-auto bg-red-500 text-white text-[8px] font-bold rounded-full min-w-[1.1rem] h-[1.1rem] flex items-center justify-center px-1 leading-none">
+                  {newLeads > 9 ? '9+' : newLeads}
+                </span>
+              )}
+            </Link>
+          )
+        })}
+      </nav>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-primary/10 space-y-3">
-          <Link
-            to="/"
-            target="_blank"
-            className="flex items-center gap-2 text-[9px] text-on-surface-variant hover:text-on-surface uppercase tracking-widest transition-colors"
-          >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-            Ver sitio
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-[9px] text-on-surface-variant hover:text-on-surface uppercase tracking-widest transition-colors"
-          >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Cerrar sesión
-          </button>
-        </div>
+      {/* Footer */}
+      <div className="p-4 border-t border-primary/10 space-y-3">
+        <Link
+          to="/"
+          target="_blank"
+          className="flex items-center gap-2 text-[9px] text-on-surface-variant hover:text-on-surface uppercase tracking-widest transition-colors"
+        >
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+          Ver sitio
+        </Link>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-[9px] text-on-surface-variant hover:text-on-surface uppercase tracking-widest transition-colors"
+        >
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </>
+  )
+
+  return (
+    <div className="min-h-screen flex bg-surface">
+
+      {/* Sidebar — desktop */}
+      <aside className="hidden lg:flex w-56 bg-white border-r border-primary/10 flex-col flex-shrink-0 sticky top-0 h-screen">
+        <SidebarContent />
+      </aside>
+
+      {/* Sidebar — mobile drawer */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/30 lg:hidden"
+          onClick={closeSidebar}
+        />
+      )}
+      <aside className={`fixed top-0 left-0 z-50 h-full w-64 bg-white flex flex-col transition-transform duration-300 lg:hidden ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
+        <SidebarContent />
       </aside>
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
         <StorageStatus />
+
         {/* Top bar */}
-        {(title || actions) && (
-          <header className="bg-white border-b border-primary/10 px-8 py-5 flex items-center justify-between flex-shrink-0">
-            <h1 className="font-serif text-2xl">{title}</h1>
-            {actions && <div className="flex items-center gap-3">{actions}</div>}
-          </header>
-        )}
+        <header className="bg-white border-b border-primary/10 px-4 lg:px-8 py-4 lg:py-5 flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center gap-4">
+            {/* Hamburger — mobile only */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-1 text-on-surface-variant hover:text-on-surface"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            {title && <h1 className="font-serif text-xl lg:text-2xl">{title}</h1>}
+          </div>
+          {actions && <div className="flex items-center gap-2 lg:gap-3">{actions}</div>}
+        </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8">
           {children}
         </main>
       </div>
