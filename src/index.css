@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* ─── Fonts ─────────────────────────────────────────── */
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: Inter, system-ui, sans-serif;
+
+  /* ─── Colors (Paleta Notion optimizada) ──────────────── */
+  /* Base (60%) */
+  --color-surface:            #F4F2E1;
+  --color-background:        #F4F2E1;
+  
+  /* Secundario (20-25%) */
+  --color-surface-variant:    #E0E2CE;
+  --color-surface-container: #E0E2CE;
+  
+  /* Complementario (10-15%) */
+  --color-card:               #CCD2BB;
+  --color-card-hover:         #C2CCB4;
+  
+  /* Accent (5-10%) - Brown más visible */
+  --color-primary:           #8B6F5C;
+  --color-primary-hover:     #6B4E40;
+  --color-on-primary:       #ffffff;
+  
+  /* Accent activo */
+  --color-primary-dark:      #D9B8A7;
+  
+  /* Texto principal */
+  --color-on-surface:        #1A1A1A;
+  
+  /* Texto secundario */
+  --color-on-surface-variant: #5F5F5F;
+  
+  /* Bordes / divisores */
+  --color-outline:           #AAB39A;
+
+  /* Inverse / dark sections (McAlpine-style moody surfaces) */
+  --color-inverse-surface:           #1f1e16;
+  --color-inverse-surface-deep:      #14130d;
+  --color-inverse-on-surface:        #f3f1e0;
+  --color-inverse-on-surface-muted:  #a8a394;
+
+  /* Legacy compatibilidad */
+  --color-primary-container: #EBD3C4;
+  --color-primary-dark:       #6B4E40;
+
+  /* ─── Spacing ───────────────────────────────────────── */
+  --spacing-section:    6rem;
+  --spacing-section-sm: 3.5rem;
+  --spacing-gutter:     2rem;
+
+  /* ─── Animations ────────────────────────────────────── */
+  --animate-fadeIn: fadeIn 0.3s ease-in-out;
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+/* ─── Base Styles ────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
+  line-height: 1.7; /* Increased for better legibility */
+  min-height: 100vh;
+}
+
+/* ─── Typography ────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+h1 { font-size: clamp(2.5rem, 5.5vw, 4.25rem); }
+h2 { font-size: clamp(2rem, 3.5vw, 3rem); }
+h3 { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+
+p {
+  max-width: 65ch; /* Limit character width for premium readability */
+}
+
+.text-editorial {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.caps-widest {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ─── Layout Utils ──────────────────────────────────────── */
+.section-padding {
+  padding-top: var(--spacing-section);
+  padding-bottom: var(--spacing-section);
+}
+
+.section-padding-sm {
+  padding-top: var(--spacing-section-sm);
+  padding-bottom: var(--spacing-section-sm);
+}
+
+.container-custom {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-gutter);
+  padding-right: var(--spacing-gutter);
+}
+
+/* ─── UI Elements ────────────────────────────────────────── */
+.btn-premium {
+  @apply relative overflow-hidden px-10 py-5 text-xs font-bold uppercase tracking-[0.2em] transition-all duration-500;
+}
+
+/* ─── GSAP Classes ───────────────────────────────────────── */
+.reveal-text {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 4px; }
+::-webkit-scrollbar-track  { background: var(--color-surface); }
+::-webkit-scrollbar-thumb  { background: var(--color-primary-container); border-radius: 2px; }
+
