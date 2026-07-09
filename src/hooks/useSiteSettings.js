@@ -8,6 +8,7 @@ export const SETTING_DEFAULTS = {
   hero_image_url: '/hero/hero.png',
   hero_focal_x: '50',
   hero_focal_y: '50',
+  manifesto_image_url: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=85',
 }
 
 const readCache = () => {

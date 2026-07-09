@@ -2,11 +2,13 @@ import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useSiteSettings } from '../../hooks/useSiteSettings'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const Manifesto = () => {
   const sectionRef = useRef(null)
+  const { settings } = useSiteSettings()
 
   useGSAP(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -40,7 +42,7 @@ const Manifesto = () => {
           <div className="aspect-[4/5] overflow-hidden">
             <img
               loading="lazy"
-              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=85"
+              src={settings.manifesto_image_url}
               alt="Detalle de materiales Arbora"
               width="800"
               height="1000"

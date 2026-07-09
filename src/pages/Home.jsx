@@ -5,6 +5,7 @@ import Manifesto from '../components/home/Manifesto'
 import ServicesGrid from '../components/home/ServicesGrid'
 import ProcessSection from '../components/home/ProcessSection'
 import TrustSection from '../components/home/TrustSection'
+import Testimonials from '../components/home/Testimonials'
 import CTAFinal from '../components/home/CTAFinal'
 
 const Home = () => (
@@ -16,6 +17,7 @@ const Home = () => (
     <ServicesGrid />
     <ProcessSection />
     <TrustSection />
+    <Testimonials />
     <CTAFinal />
   </main>
 )

@@ -8,6 +8,8 @@ const AdminSitio = () => {
   const [local, setLocal] = useState(SETTING_DEFAULTS)
   const [imageFile, setImageFile] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
+  const [manifestoFile, setManifestoFile] = useState(null)
+  const [manifestoPreview, setManifestoPreview] = useState(null)
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saved, setSaved] = useState(false)
@@ -37,6 +39,19 @@ const AdminSitio = () => {
     setImagePreview(null)
   }
 
+  const handleManifestoFile = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setManifestoFile(file)
+    setManifestoPreview(URL.createObjectURL(file))
+  }
+
+  const cancelManifestoFile = () => {
+    setManifestoFile(null)
+    if (manifestoPreview) URL.revokeObjectURL(manifestoPreview)
+    setManifestoPreview(null)
+  }
+
   // Click on the preview image to set focal point
   const handleFocalClick = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -45,22 +60,26 @@ const AdminSitio = () => {
     setLocal((p) => ({ ...p, hero_focal_x: String(x), hero_focal_y: String(y) }))
   }
 
+  const uploadToSiteAssets = async (file, prefix) => {
+    const fileName = `${prefix}-${Date.now()}-${sanitizeFileName(file.name)}`
+    const { error: uploadError } = await supabase.storage
+      .from('site-assets')
+      .upload(fileName, file, { upsert: false })
+    if (uploadError) throw uploadError
+    const { data: urlData } = supabase.storage.from('site-assets').getPublicUrl(fileName)
+    return urlData.publicUrl
+  }
+
   const handleSave = async () => {
     setSaving(true)
     try {
-      let imageUrl = local.hero_image_url
+      let heroUrl = local.hero_image_url
+      let manifestoUrl = local.manifesto_image_url
 
-      if (imageFile) {
-        const fileName = `hero-${Date.now()}-${sanitizeFileName(imageFile.name)}`
-        const { error: uploadError } = await supabase.storage
-          .from('site-assets')
-          .upload(fileName, imageFile, { upsert: false })
-        if (uploadError) throw uploadError
-        const { data: urlData } = supabase.storage.from('site-assets').getPublicUrl(fileName)
-        imageUrl = urlData.publicUrl
-      }
+      if (imageFile) heroUrl = await uploadToSiteAssets(imageFile, 'hero')
+      if (manifestoFile) manifestoUrl = await uploadToSiteAssets(manifestoFile, 'manifesto')
 
-      const merged = { ...local, hero_image_url: imageUrl }
+      const merged = { ...local, hero_image_url: heroUrl, manifesto_image_url: manifestoUrl }
       const rows = Object.entries(merged).map(([key, value]) => ({ key, value: String(value) }))
       const { error } = await supabase.from('site_settings').upsert(rows, { onConflict: 'key' })
       if (error) throw error
@@ -68,6 +87,7 @@ const AdminSitio = () => {
       clearSettingsCache()
       setLocal(merged)
       cancelImageFile()
+      cancelManifestoFile()
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
     } catch (err) {
@@ -81,6 +101,7 @@ const AdminSitio = () => {
   const previewSrc = imagePreview || local.hero_image_url
   const fx = Number(local.hero_focal_x)
   const fy = Number(local.hero_focal_y)
+  const manifestoPreviewSrc = manifestoPreview || local.manifesto_image_url
 
   if (loading) {
     return (
@@ -185,6 +206,41 @@ const AdminSitio = () => {
             ) : (
               <p className="text-[10px] text-on-surface-variant">
                 JPG · PNG · WebP · Recomendado: 2400 × 1600 px o mayor
+              </p>
+            )}
+          </div>
+        </section>
+
+        {/* Manifesto image */}
+        <section className="bg-white border border-primary/10 rounded-sm p-8 space-y-6">
+          <div>
+            <h2 className="font-serif text-xl mb-1">Imagen del Manifiesto</h2>
+            <p className="text-xs text-on-surface-variant leading-relaxed">
+              Foto vertical que acompaña la sección oscura "Manifiesto" en el Home.
+            </p>
+          </div>
+
+          <div className="relative aspect-[4/5] max-w-xs overflow-hidden rounded-sm bg-surface-variant">
+            <img
+              src={manifestoPreviewSrc}
+              alt="Manifiesto preview"
+              className="w-full h-full object-cover"
+              style={{ filter: 'brightness(0.85) contrast(1.05)' }}
+            />
+          </div>
+
+          <div className="flex items-center gap-4 pt-2">
+            <label className="px-6 py-2.5 border border-primary/20 rounded-sm text-[10px] font-bold uppercase tracking-widest cursor-pointer hover:bg-surface transition-colors">
+              {manifestoFile ? `✓  ${manifestoFile.name}` : 'Subir nueva imagen'}
+              <input type="file" accept="image/*" onChange={handleManifestoFile} className="hidden" />
+            </label>
+            {manifestoFile ? (
+              <button type="button" onClick={cancelManifestoFile} className="text-xs text-on-surface-variant hover:text-on-surface">
+                Cancelar
+              </button>
+            ) : (
+              <p className="text-[10px] text-on-surface-variant">
+                JPG · PNG · WebP · Vertical, recomendado 1200 × 1500 px o mayor
               </p>
             )}
           </div>

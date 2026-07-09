@@ -1,35 +1,27 @@
-// Sample testimonials — replace with real ones
+// Placeholder testimonials. Field names mirror the Google Places API
+// "reviews" response shape (author_name, rating, relative_time_description,
+// text, profile_photo_url) so this file can later be replaced by a live
+// fetch from Google Business Profile reviews with no shape changes needed.
 export const testimonials = [
   {
-    id: 1,
-    name: 'Valentina Morales',
-    role: 'Propietaria · Residencia Terra',
-    text: 'Entregamos la casa con toda la confianza y el resultado superó todo lo que habíamos imaginado. El equipo entiende el espacio de una manera que yo nunca hubiera podido articular sola.',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80',
+    author_name: 'Carolina Reyes',
+    profile_photo_url: null,
     rating: 5,
+    relative_time_description: 'hace 2 meses',
+    text: 'El equipo de Arbora transformó nuestro departamento sin perder un solo día de obra fuera de plazo. La atención al detalle en la cocina fue notable.',
   },
   {
-    id: 2,
-    name: 'Rodrigo Fernández',
-    role: 'Cliente · Cocina Nórdica',
-    text: 'La cocina que diseñaron cambió completamente cómo vivimos en casa. Ahora cocinamos todos juntos. Eso no tiene precio.',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80',
+    author_name: 'Matías Ovalle',
+    profile_photo_url: null,
     rating: 5,
+    relative_time_description: 'hace 4 meses',
+    text: 'Encontramos un equipo que realmente escucha. El proceso de diseño fue claro desde el primer encuentro hasta la entrega final.',
   },
   {
-    id: 3,
-    name: 'Camila y Jorge Ibáñez',
-    role: 'Clientes · Casa Los Trapenses',
-    text: 'La reforma duró exactamente lo que prometieron y el presupuesto no se movió ni un peso. En una industria donde eso nunca pasa, es simplemente extraordinario.',
-    image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&q=80',
-    rating: 5,
+    author_name: 'Francisca Lagos',
+    profile_photo_url: null,
+    rating: 4,
+    relative_time_description: 'hace 7 meses',
+    text: 'Reformamos el living y el comedor completo. Buena comunicación durante toda la obra y un resultado que superó lo que imaginábamos.',
   },
-]
-
-// Brand stats for Trust Section
-export const stats = [
-  { value: 47, suffix: '+', label: 'Proyectos completados' },
-  { value: 8, suffix: ' años', label: 'De experiencia' },
-  { value: 98, suffix: '%', label: 'Clientes satisfechos' },
-  { value: 4.9, suffix: '/5', label: 'Valoración media' },
 ]
