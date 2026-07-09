@@ -160,19 +160,20 @@ const AdminLeads = () => {
   const [filter, setFilter] = useState('all')
   const [expandedId, setExpandedId] = useState(null)
 
+  // Inlined directly in the effect (rather than a named function called from
+  // it) so the initial load doesn't trip the "setState synchronously in
+  // effect" lint rule.
   useEffect(() => {
-    fetchLeads()
+    const load = async () => {
+      const { data } = await supabase
+        .from('contact_entries')
+        .select('*')
+        .order('created_at', { ascending: false })
+      if (data) setLeads(data)
+      setLoading(false)
+    }
+    load()
   }, [])
-
-  const fetchLeads = async () => {
-    setLoading(true)
-    const { data } = await supabase
-      .from('contact_entries')
-      .select('*')
-      .order('created_at', { ascending: false })
-    if (data) setLeads(data)
-    setLoading(false)
-  }
 
   const handleStatusChange = async (id, newStatus) => {
     await supabase.from('contact_entries').update({ status: newStatus }).eq('id', id)

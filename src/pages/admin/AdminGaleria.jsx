@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { sanitizeFileName } from '../../lib/utils'
 import AdminLayout from '../../components/admin/AdminLayout'
@@ -8,7 +8,7 @@ const AdminGaleria = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
-  
+
   // Form State
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -43,12 +43,12 @@ const AdminGaleria = () => {
       alert('Máximo 5 imágenes permitidas por post.')
       return
     }
-    
+
     setFormData(prev => ({ ...prev, images: [...prev.images, ...files] }))
-    
+
     const newPreviews = files.map(f => URL.createObjectURL(f))
     setPreviewImages(prev => [...prev, ...newPreviews])
-    
+
     e.target.value = ''
   }
 
@@ -107,7 +107,7 @@ const AdminGaleria = () => {
         const { data: urlData } = supabase.storage
           .from('gallery-images')
           .getPublicUrl(fileName)
-        
+
         imageUrls.push(urlData.publicUrl)
       }
 
@@ -124,7 +124,7 @@ const AdminGaleria = () => {
         const { data: urlData } = supabase.storage
           .from('project-models')
           .getPublicUrl(fileName)
-        
+
         modelUrl = urlData.publicUrl
       }
 
@@ -199,7 +199,7 @@ const AdminGaleria = () => {
       {isFormOpen && (
         <div className="bg-white border border-primary/10 rounded-sm p-8 mb-12 shadow-sm">
           <h2 className="text-xl font-serif mb-6">Crear Publicación de Galería</h2>
-          
+
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -238,7 +238,7 @@ const AdminGaleria = () => {
                   <input type="file" multiple accept="image/*" onChange={handleImageSelect} className="hidden" />
                 </label>
               </div>
-              
+
               {previewImages.length > 0 ? (
                 <div className="flex gap-4 overflow-x-auto pb-4">
                   {previewImages.map((src, i) => (
@@ -264,7 +264,7 @@ const AdminGaleria = () => {
             {/* 3D Model Selection */}
             <div className="space-y-4">
               <label className="text-[10px] font-bold uppercase tracking-widest text-primary/60 block">Modelo 3D (.glb) Opcional</label>
-              
+
               {formData.modelFile ? (
                 <div className="flex items-center justify-between bg-surface-variant p-4 rounded-sm border border-primary/10">
                   <div className="flex items-center gap-3">
@@ -339,7 +339,7 @@ const AdminGaleria = () => {
                     <span className="text-[10px] uppercase tracking-widest">Modelo 3D</span>
                   </div>
                 )}
-                
+
                 {/* Badges for multiple media */}
                 <div className="absolute top-2 right-2 flex gap-1">
                   {item.images?.length > 1 && (

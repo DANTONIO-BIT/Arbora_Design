@@ -12,16 +12,23 @@ const AdminCategorias = () => {
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({ name: '', slug: '', color: '#8B6F5C', description: '' })
 
-  useEffect(() => {
-    fetchCategories()
-  }, [])
-
   const fetchCategories = async () => {
-    setLoading(true)
     const { data } = await supabase.from('categories').select('*').order('name')
     if (data) setCategories(data)
     setLoading(false)
   }
+
+  // Inlined (rather than calling fetchCategories directly) so the initial
+  // load doesn't trip the "setState synchronously in effect" lint rule —
+  // fetchCategories is still called directly from handleSubmit below.
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase.from('categories').select('*').order('name')
+      if (data) setCategories(data)
+      setLoading(false)
+    }
+    load()
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target

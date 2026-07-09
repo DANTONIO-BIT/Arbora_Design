@@ -17,12 +17,18 @@ const readCache = () => {
     if (!cached) return null
     const { data, ts } = JSON.parse(cached)
     if (Date.now() - ts < CACHE_TTL) return data
-  } catch {}
+  } catch {
+    /* localStorage unavailable (e.g. private mode) — safe to ignore */
+  }
   return null
 }
 
 export const clearSettingsCache = () => {
-  try { localStorage.removeItem(CACHE_KEY) } catch {}
+  try {
+    localStorage.removeItem(CACHE_KEY)
+  } catch {
+    /* localStorage unavailable (e.g. private mode) — safe to ignore */
+  }
 }
 
 export const useSiteSettings = () => {
@@ -40,7 +46,9 @@ export const useSiteSettings = () => {
         setSettings({ ...SETTING_DEFAULTS, ...fromDB })
         try {
           localStorage.setItem(CACHE_KEY, JSON.stringify({ data: fromDB, ts: Date.now() }))
-        } catch {}
+        } catch {
+          /* localStorage unavailable (e.g. private mode) — safe to ignore */
+        }
       }
       setLoading(false)
     }

@@ -12,7 +12,7 @@ const getWhatsAppMessage = (pathname) => {
     '/contacto': 'Hola, quiero más información',
     '/about': 'Hola, me interesa conocer más',
   }
-  
+
   return messages[pathname] || messages['/']
 }
 
@@ -24,10 +24,10 @@ const WhatsAppButton = () => {
   const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '+56900000000'
 
   useGSAP(() => {
-    gsap.set(contentRef.current, { 
-      x: 20, 
-      opacity: 0, 
-      pointerEvents: 'none' 
+    gsap.set(contentRef.current, {
+      x: 20,
+      opacity: 0,
+      pointerEvents: 'none'
     })
   }, { scope: containerRef })
 
@@ -70,15 +70,16 @@ const WhatsAppButton = () => {
   ]
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="fixed bottom-8 right-8 z-50"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {/* Quick options - solo desktop */}
-      <div 
+      <div
         ref={contentRef}
+        aria-hidden={!isOpen}
         className="absolute right-16 bottom-0 flex flex-col gap-2 pointer-events-none"
       >
         {quickOptions.map((option, index) => {
@@ -96,10 +97,11 @@ const WhatsAppButton = () => {
           )
         })}
       </div>
-      
+
       {/* Botón flotante */}
       <button
         onClick={handleClick}
+        aria-expanded={isOpen}
         className="w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_10px_40px_rgba(37,211,102,0.3)] hover:shadow-[0_15px_50px_rgba(37,211,102,0.4)] hover:scale-110 transition-all duration-300"
         aria-label="Contactar por WhatsApp"
       >

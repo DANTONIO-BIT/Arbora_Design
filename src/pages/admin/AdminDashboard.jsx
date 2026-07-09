@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import AdminLayout from '../../components/admin/AdminLayout'
 
@@ -36,65 +36,68 @@ const AdminDashboard = () => {
   const [search,         setSearch]         = useState('')
   const [filter,         setFilter]         = useState('all')
   const [deleting,       setDeleting]       = useState(null)
-  const navigate = useNavigate()
 
-  useEffect(() => { fetchData() }, [])
+  // Inlined directly in the effect (rather than a named function called from
+  // it) so the initial load doesn't trip the "setState synchronously in
+  // effect" lint rule.
+  useEffect(() => {
+    const load = async () => {
+      const monthStart = startOfMonth()
 
-  const fetchData = async () => {
-    setLoading(true)
-    const monthStart = startOfMonth()
+      const [
+        { data: projs },
+        { count: galCount },
+        { count: leadsNew },
+        { data: views },
+        { data: leadsRecent },
+      ] = await Promise.all([
+        supabase.from('projects').select('*, categories(name)').order('created_at', { ascending: false }),
+        supabase.from('gallery').select('*', { count: 'exact', head: true }),
+        supabase.from('contact_entries').select('*', { count: 'exact', head: true }).eq('status', 'nuevo'),
+        supabase.from('page_views').select('path, project_slug, created_at').gte('created_at', monthStart),
+        supabase.from('contact_entries').select('id, name, service, status, created_at').order('created_at', { ascending: false }).limit(3),
+      ])
 
-    const [
-      { data: projs },
-      { count: galCount },
-      { count: leadsNew },
-      { data: views },
-      { data: leadsRecent },
-    ] = await Promise.all([
-      supabase.from('projects').select('*, categories(name)').order('created_at', { ascending: false }),
-      supabase.from('gallery').select('*', { count: 'exact', head: true }),
-      supabase.from('contact_entries').select('*', { count: 'exact', head: true }).eq('status', 'nuevo'),
-      supabase.from('page_views').select('path, project_slug, created_at').gte('created_at', monthStart),
-      supabase.from('contact_entries').select('id, name, service, status, created_at').order('created_at', { ascending: false }).limit(3),
-    ])
+      if (projs) setProjects(projs)
+      setGalleryCount(galCount || 0)
+      setLeadsCount(leadsNew || 0)
+      if (leadsRecent) setRecentLeads(leadsRecent)
 
-    if (projs) setProjects(projs)
-    setGalleryCount(galCount || 0)
-    setLeadsCount(leadsNew || 0)
-    if (recentLeads) setRecentLeads(leadsRecent)
+      // Analytics
+      if (views) {
+        setViewsMonth(views.length)
 
-    // Analytics
-    if (views) {
-      setViewsMonth(views.length)
+        // Most visited project
+        const slugCounts = {}
+        views.forEach(({ project_slug }) => {
+          if (project_slug) slugCounts[project_slug] = (slugCounts[project_slug] || 0) + 1
+        })
+        const sorted = Object.entries(slugCounts).sort((a, b) => b[1] - a[1])
+        setTopProject(sorted[0] || null)
 
-      // Most visited project
-      const slugCounts = {}
-      views.forEach(({ project_slug }) => {
-        if (project_slug) slugCounts[project_slug] = (slugCounts[project_slug] || 0) + 1
-      })
-      const sorted = Object.entries(slugCounts).sort((a, b) => b[1] - a[1])
-      setTopProject(sorted[0] || null)
+        // Daily chart (last 7 days)
+        const days = lastNDays(7)
+        const dayMap = {}
+        views.forEach(({ created_at }) => {
+          const day = created_at.split('T')[0]
+          dayMap[day] = (dayMap[day] || 0) + 1
+        })
+        setDailyViews(days.map((d) => ({ ...d, count: dayMap[d.date] || 0 })))
 
-      // Daily chart (last 7 days)
-      const days = lastNDays(7)
-      const dayMap = {}
-      views.forEach(({ created_at }) => {
-        const day = created_at.split('T')[0]
-        dayMap[day] = (dayMap[day] || 0) + 1
-      })
-      setDailyViews(days.map((d) => ({ ...d, count: dayMap[d.date] || 0 })))
+        // Conversion ratio this month
+        const leadsThisMonth = await supabase
+          .from('contact_entries')
+          .select('*', { count: 'exact', head: true })
+          .gte('created_at', monthStart)
+        const ratio = views.length > 0 ? ((leadsThisMonth.count || 0) / views.length) * 100 : 0
+        setConvRatio(Math.round(ratio * 10) / 10)
+      }
 
-      // Conversion ratio this month
-      const leadsThisMonth = await supabase
-        .from('contact_entries')
-        .select('*', { count: 'exact', head: true })
-        .gte('created_at', monthStart)
-      const ratio = views.length > 0 ? ((leadsThisMonth.count || 0) / views.length) * 100 : 0
-      setConvRatio(Math.round(ratio * 10) / 10)
+      setLoading(false)
     }
 
-    setLoading(false)
-  }
+    load()
+  }, [])
 
   const togglePublished = async (e, id, current) => {
     e.preventDefault(); e.stopPropagation()
