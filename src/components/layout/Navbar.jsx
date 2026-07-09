@@ -134,10 +134,10 @@ const Navbar = () => {
         }`}
       >
         <div className="container-custom flex justify-between items-center">
-          {/* Brand — lowercase serif, italic dot accent */}
+          {/* Brand — uppercase display serif */}
           <Link to="/" className="relative z-50 group" aria-label="Arbora — inicio">
-            <span className="font-serif text-2xl md:text-[1.7rem] tracking-[0.04em] lowercase font-light leading-none">
-              arbora<span className="italic text-primary group-hover:opacity-70 transition-opacity">.</span>
+            <span className="font-display text-xl md:text-2xl tracking-[0.08em] uppercase leading-none group-hover:text-primary transition-colors">
+              Arbora
             </span>
           </Link>
 

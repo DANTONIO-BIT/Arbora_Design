@@ -20,16 +20,15 @@ const Hero = () => {
 
     if (prefersReduced) return
 
-    gsap.from('.hero-title-line', {
-      y: 80,
+    gsap.from('.hero-wordmark', {
+      y: 60,
       opacity: 0,
       duration: 1.2,
-      stagger: 0.1,
       ease: 'expo.out',
       delay: 0.65,
     })
 
-    gsap.from('.hero-side-content', {
+    gsap.from('.hero-tagline', {
       y: 30,
       opacity: 0,
       duration: 1,
@@ -37,8 +36,7 @@ const Hero = () => {
       delay: 0.95,
     })
 
-    gsap.from('.hero-bottom-bar', {
-      y: 20,
+    gsap.from('.hero-photo-caption', {
       opacity: 0,
       duration: 0.8,
       ease: 'power3.out',
@@ -50,106 +48,89 @@ const Hero = () => {
   const focalY = settings.hero_focal_y ?? '50'
 
   return (
-    <header
-      ref={containerRef}
-      data-nav-theme="dark"
-      className="relative h-screen min-h-[720px] overflow-hidden flex items-end"
-    >
-      {/* Entrance curtain — sits above content, below navbar (z-50) */}
+    <header ref={containerRef} className="relative overflow-hidden">
+      {/* Photo block — framed, ~3/4 of viewport height */}
       <div
-        ref={curtainRef}
-        className="absolute inset-0 z-40 origin-top"
-        style={{ backgroundColor: 'var(--color-inverse-surface-deep)' }}
-      />
-
-      {/* Background image */}
-      <div
-        className="absolute inset-0 bg-cover"
-        style={{
-          backgroundImage: `url(${settings.hero_image_url})`,
-          backgroundPosition: `${focalX}% ${focalY}%`,
-          transform: 'scale(1.04)',
-        }}
-      />
-
-      {/* Gradient overlay — dark top + dark bottom, transparent center */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(180deg, rgba(20,19,13,0.45) 0%, rgba(20,19,13,0.05) 35%, rgba(20,19,13,0.65) 100%)',
-        }}
-      />
-
-      {/* Rotated side label — visible on large screens */}
-      <div
-        className="absolute hidden lg:block z-10"
-        style={{
-          left: '48px',
-          top: '50%',
-          transform: 'translateY(-50%) rotate(-90deg)',
-          transformOrigin: 'left center',
-        }}
+        data-nav-theme="dark"
+        className="relative mt-4 md:mt-6 mx-4 md:mx-8 h-[75vh] min-h-[460px] overflow-hidden"
       >
-        <span className="text-[11px] uppercase tracking-[0.28em]" style={{ color: 'rgba(243, 241, 224, 0.65)' }}>
-          Est. 2018 · Santiago de Chile
-        </span>
-      </div>
+        {/* Entrance curtain */}
+        <div
+          ref={curtainRef}
+          className="absolute inset-0 z-40 origin-top"
+          style={{ backgroundColor: 'var(--color-inverse-surface-deep)' }}
+        />
 
-      {/* Main content — anchored to bottom */}
-      <div className="relative z-10 w-full container-custom pb-20 grid grid-cols-1 md:grid-cols-2 gap-16 items-end">
-        {/* Title — word-by-word reveal */}
-        <h1>
-          <span className="hero-title-line block overflow-hidden">
-            <span className="block font-serif font-light text-[clamp(56px,9vw,132px)] leading-[0.92] tracking-[-0.02em] text-inverse-on-surface">
-              espacios
-            </span>
-          </span>
-          <span className="hero-title-line block overflow-hidden">
-            <span className="block font-serif font-light text-[clamp(56px,9vw,132px)] leading-[0.92] tracking-[-0.02em] text-inverse-on-surface">
-              que{' '}
-              <em
-                className="italic font-light"
-                style={{ color: 'rgba(243, 241, 224, 0.75)' }}
-              >
-                respiran
-              </em>
-            </span>
-          </span>
-          <span className="hero-title-line block overflow-hidden">
-            <span className="block font-serif font-light text-[clamp(56px,9vw,132px)] leading-[0.92] tracking-[-0.02em] text-inverse-on-surface">
-              en silencio.
-            </span>
-          </span>
-        </h1>
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover"
+          style={{
+            backgroundImage: `url(${settings.hero_image_url})`,
+            backgroundPosition: `${focalX}% ${focalY}%`,
+            transform: 'scale(1.04)',
+          }}
+        />
 
-        {/* Side copy */}
-        <div className="hero-side-content pb-5">
-          <span
-            className="text-[11px] uppercase tracking-[0.28em] block mb-4"
-            style={{ color: 'rgba(243, 241, 224, 0.55)' }}
-          >
-            Estudio de interiorismo
+        {/* Gradient overlay — dark top + dark bottom, transparent center */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(20,19,13,0.35) 0%, rgba(20,19,13,0.02) 32%, rgba(20,19,13,0.55) 100%)',
+          }}
+        />
+
+        {/* Rotated side label — visible on large screens */}
+        <div
+          className="hero-photo-caption absolute hidden lg:block z-10"
+          style={{
+            left: '32px',
+            top: '50%',
+            transform: 'translateY(-50%) rotate(-90deg)',
+            transformOrigin: 'left center',
+          }}
+        >
+          <span className="text-[11px] uppercase tracking-[0.28em]" style={{ color: 'rgba(243, 241, 224, 0.65)' }}>
+            Est. 2018 · Santiago de Chile
           </span>
-          <p
-            className="text-[15px] leading-[1.65] max-w-[380px] font-light"
-            style={{ color: 'rgba(243, 241, 224, 0.85)' }}
-          >
-            Diseñamos casas, cocinas y muebles a medida en Santiago. Cada proyecto comienza con
-            la luz, el clima y los hábitos de quienes lo van a habitar.
-          </p>
+        </div>
+
+        {/* Caption bar — featured project + scroll indicator */}
+        <div
+          className="hero-photo-caption absolute bottom-6 left-0 right-0 z-10 px-6 md:px-10 flex justify-between items-end text-[11px] uppercase tracking-[0.28em]"
+          style={{ color: 'rgba(243, 241, 224, 0.75)' }}
+        >
+          <span>Featured · Residencia Terra · Las Condes</span>
+          <div className="flex items-center gap-3">
+            <span>Scroll</span>
+            <span className="inline-block w-10 h-px bg-current opacity-50" />
+          </div>
         </div>
       </div>
 
-      {/* Bottom bar — featured project + scroll indicator */}
-      <div
-        className="hero-bottom-bar absolute bottom-8 left-0 right-0 z-10 container-custom flex justify-between items-end text-[11px] uppercase tracking-[0.28em]"
-        style={{ color: 'rgba(243, 241, 224, 0.70)' }}
-      >
-        <span>Featured · Residencia Terra · Las Condes</span>
-        <div className="flex items-center gap-3">
-          <span>Scroll</span>
-          <span className="inline-block w-10 h-px bg-current opacity-50" />
+      {/* Wordmark + tagline block — below the photo, normal light surface */}
+      <div className="bg-surface pt-14 pb-20 md:pt-16 md:pb-24">
+        <div className="container-custom">
+          <h1 className="hero-wordmark overflow-hidden">
+            <span className="block font-display uppercase text-on-surface leading-[0.85] tracking-[0.01em] text-[clamp(64px,13vw,180px)]">
+              Arbora
+            </span>
+          </h1>
+
+          <div className="hero-tagline mt-8 md:mt-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
+            <p className="font-serif font-light text-[clamp(20px,2.2vw,28px)] leading-[1.3] tracking-[-0.005em] text-on-surface">
+              espacios que <em className="italic text-primary">respiran</em> en silencio.
+            </p>
+            <div>
+              <span className="text-[11px] uppercase tracking-[0.28em] text-on-surface-variant block mb-3">
+                Estudio de interiorismo
+              </span>
+              <p className="text-[14px] leading-[1.65] max-w-[380px] font-light text-on-surface-variant">
+                Diseñamos casas, cocinas y muebles a medida en Santiago. Cada proyecto comienza con
+                la luz, el clima y los hábitos de quienes lo van a habitar.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </header>

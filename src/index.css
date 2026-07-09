@@ -1,38 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 @import "tailwindcss";
 
 @theme {
   /* ─── Fonts ─────────────────────────────────────────── */
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: Inter, system-ui, sans-serif;
+  --font-display: "Bodoni Moda", Georgia, serif;
 
   /* ─── Colors (Paleta Notion optimizada) ──────────────── */
   /* Base (60%) */
   --color-surface:            #F4F2E1;
   --color-background:        #F4F2E1;
-  
+
   /* Secundario (20-25%) */
   --color-surface-variant:    #E0E2CE;
   --color-surface-container: #E0E2CE;
-  
+
   /* Complementario (10-15%) */
   --color-card:               #CCD2BB;
   --color-card-hover:         #C2CCB4;
-  
+
   /* Accent (5-10%) - Brown más visible */
   --color-primary:           #8B6F5C;
   --color-primary-hover:     #6B4E40;
   --color-on-primary:       #ffffff;
-  
+
   /* Accent activo */
   --color-primary-dark:      #D9B8A7;
-  
+
   /* Texto principal */
   --color-on-surface:        #1A1A1A;
-  
+
   /* Texto secundario */
   --color-on-surface-variant: #5F5F5F;
-  
+
   /* Bordes / divisores */
   --color-outline:           #AAB39A;
 
@@ -141,4 +142,3 @@ p {
 ::-webkit-scrollbar        { width: 4px; }
 ::-webkit-scrollbar-track  { background: var(--color-surface); }
 ::-webkit-scrollbar-thumb  { background: var(--color-primary-container); border-radius: 2px; }
-

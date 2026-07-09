@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-// Editorial dark footer — McAlpine-style oversized lowercase brand,
+// Editorial dark footer — McAlpine-style oversized uppercase brand,
 // uppercase tracked labels, italic-on-hover links.
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -55,8 +55,8 @@ const Footer = () => {
           {/* Brand column */}
           <div className="md:col-span-5 space-y-8">
             <Link to="/" className="inline-block group" aria-label="Arbora — inicio">
-              <span className="font-serif font-light lowercase text-5xl md:text-6xl xl:text-7xl tracking-[0.02em] leading-none">
-                arbora<span className="italic text-primary">.</span>
+              <span className="font-display uppercase text-5xl md:text-6xl xl:text-7xl tracking-[0.03em] leading-none group-hover:text-primary transition-colors">
+                Arbora
               </span>
             </Link>
             <p className="text-inverse-on-surface/70 text-[15px] font-light leading-relaxed max-w-md">
