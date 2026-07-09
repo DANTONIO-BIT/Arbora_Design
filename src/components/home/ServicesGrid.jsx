@@ -51,7 +51,7 @@ const ServicesGrid = () => {
         {/* Header */}
         <div ref={headRef} className="svc-head grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-20 mb-20 items-start">
           <span className="text-[11px] uppercase tracking-[0.28em] text-on-surface-variant pt-3">
-            [ 04 ] Servicios
+            [ 05 ] Servicios
           </span>
           <h3 className="font-serif font-light text-[clamp(36px,5vw,72px)] tracking-[-0.01em] leading-[1] text-on-surface">
             Lo que{' '}

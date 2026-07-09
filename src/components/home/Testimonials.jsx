@@ -59,7 +59,7 @@ const Testimonials = () => {
       <div className="container-custom">
         <div ref={headRef} className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 mb-20">
           <span className="text-[11px] uppercase tracking-[0.28em] text-on-surface-variant block">
-            [ 06 ] Testimonios
+            [ 07 ] Testimonios
           </span>
           <h3 className="font-serif font-light text-[clamp(36px,5vw,72px)] tracking-[-0.01em] leading-[1] text-on-surface">
             Lo que dicen quienes ya <em className="italic">vivieron</em> el proceso.

@@ -155,10 +155,14 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* ─── Full-screen overlay menu ─── */}
+      {/* ─── Full-screen overlay menu ───
+          -translate-y-full is the CSS default: it keeps this hidden from the
+          very first paint regardless of how long JS takes to load and run
+          gsap.set below. Without it, a slow load briefly shows the whole
+          menu (nav links, contact info) sitting on top of the page. */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 z-[60] flex flex-col justify-between px-6 md:px-16 xl:px-24 pt-32 md:pt-36 pb-12"
+        className="fixed inset-0 z-[60] flex flex-col justify-between px-6 md:px-16 xl:px-24 pt-32 md:pt-36 pb-12 -translate-y-full"
         style={{ backgroundColor: 'var(--color-inverse-surface-deep)' }}
       >
         {/* Top label inside overlay */}

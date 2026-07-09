@@ -35,7 +35,7 @@ const CTAFinal = () => {
     <section ref={sectionRef} className="bg-surface py-48 md:py-52 text-center">
       <div className="container-custom">
         <span className="text-[11px] uppercase tracking-[0.28em] text-on-surface-variant block mb-12">
-          [ 07 ] Comienza tu proyecto
+          [ 06 ] Comienza tu proyecto
         </span>
 
         <h2 className="cta-headline font-serif font-light text-[clamp(48px,8vw,132px)] leading-[0.95] tracking-[-0.025em] text-on-surface">
